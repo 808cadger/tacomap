@@ -1,0 +1,11 @@
+{
+  "name": "tacomap",
+  "version": "1.0.0",
+  "description": "TacoMap — Interactive Latin American food map with taco crawl planner",
+  "author": "Christopher Cadger <cadger808@codeberg.org>",
+  "license": "UNLICENSED",
+  "overrides": {
+    "picomatch": ">=4.0.2",
+    "brace-expansion": ">=2.0.1"
+  }
+}

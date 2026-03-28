@@ -6,6 +6,7 @@
   <title>TacoMap — Latin American Flavors, Mapped</title>
   <meta name="description" content="Interactive Latin American food map with regional filters and taco crawl planner." />
   <meta name="theme-color" content="#f97316" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://overpass-api.de; font-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self';" />
   <link rel="manifest" href="./manifest.json" />
   <link rel="apple-touch-icon" href="./icons/icon-192.png" />
   <style>
@@ -670,6 +671,9 @@
     // #ASSUMPTION: Capacitor.Geolocation available in native build; falls back to browser geo for PWA
 
     const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
+    // #ASSUMPTION: esc() is called on all external/user-controlled strings before innerHTML
+    function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    let nearbyAbort = null;
     const CUISINE_TERMS = 'mexican|taco|tacos|latin|peruvian|colombian|cuban|brazilian|argentinian|salvadoran|guatemalan|honduran|caribbean|tex.mex|burrito';
     const NAME_TERMS    = 'taco|tacos|burrito|mexican|latin|cantina|hacienda|azteca|fiesta|loco|carnitas|ceviche|tamale|quesadilla|salsas|cocina';
 
@@ -741,22 +745,25 @@ out body center 40;`;
           const phone   = tags.phone || tags['contact:phone'] || '';
           const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
 
+          // validate coords before building maps URL — prevents open redirect from malicious OSM data
+          const validCoords = !isNaN(parseFloat(lat)) && !isNaN(parseFloat(lon)) && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180;
+          const safeMapsUrl = validCoords ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(lat)},${encodeURIComponent(lon)}` : null;
           const card = document.createElement('div');
           card.className = 'nearby-card';
           card.innerHTML = `
-            <div class="nearby-name">${name}</div>
+            <div class="nearby-name">${esc(name)}</div>
             <div class="nearby-meta">
-              ${cuisine ? `<span class="nearby-cuisine">${cuisine}</span>` : ''}
-              <span class="nearby-dist">📍 ${fmtDist(dist)}</span>
+              ${cuisine ? `<span class="nearby-cuisine">${esc(cuisine)}</span>` : ''}
+              <span class="nearby-dist">📍 ${esc(fmtDist(dist))}</span>
             </div>
-            ${addr ? `<div class="nearby-addr">${addr}</div>` : ''}
-            ${phone ? `<div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.6rem;">📞 ${phone}</div>` : ''}
-            <a class="btn-directions" href="${mapsUrl}" target="_blank" rel="noopener">
+            ${addr ? `<div class="nearby-addr">${esc(addr)}</div>` : ''}
+            ${phone ? `<div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.6rem;">📞 ${esc(phone)}</div>` : ''}
+            ${safeMapsUrl ? `<a class="btn-directions" href="${esc(safeMapsUrl)}" target="_blank" rel="noopener">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <polygon points="3 11 22 2 13 21 11 13 3 11"/>
               </svg>
               Directions
-            </a>
+            </a>` : ''}
           `;
           grid.appendChild(card);
         });
@@ -809,9 +816,12 @@ out body center 40;`;
       }
 
       try {
+        if (nearbyAbort) nearbyAbort.abort();
+        nearbyAbort = new AbortController();
         const query = buildOverpassQuery(userLat, userLon, radius);
         const res   = await fetch(OVERPASS_URL, {
           method: 'POST',
+          signal: nearbyAbort.signal,
           body: `data=${encodeURIComponent(query)}`,
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         });

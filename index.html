@@ -252,9 +252,90 @@
       font-size: 0.82rem; color: var(--muted);
     }
 
+    /* ── Nearby finder ── */
+    #nearby-section {
+      padding: 2rem 1.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .nearby-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1.2rem;
+    }
+    .btn-locate {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      padding: 0.75rem 1.4rem; border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), #ea580c);
+      color: #000; font-size: 0.92rem; font-weight: 800;
+      border: none; cursor: pointer;
+      transition: opacity 0.18s, transform 0.18s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 3px 16px rgba(249,115,22,0.35);
+    }
+    .btn-locate:hover  { opacity: 0.88; transform: translateY(-1px); }
+    .btn-locate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .radius-select {
+      padding: 0.45rem 0.8rem; border-radius: 8px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); font-size: 0.82rem; outline: none; cursor: pointer;
+    }
+    .nearby-status {
+      font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem;
+      min-height: 1.2rem;
+    }
+    .nearby-status.error { color: #f87171; }
+    .nearby-status.loading { color: var(--accent); }
+    .nearby-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .nearby-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.1rem;
+      transition: border-color 0.18s, transform 0.18s cubic-bezier(0.4,0,0.2,1);
+      position: relative; overflow: hidden;
+    }
+    .nearby-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), #fbbf24);
+      opacity: 0; transition: opacity 0.18s;
+    }
+    .nearby-card:hover { border-color: rgba(249,115,22,0.4); transform: translateY(-2px); }
+    .nearby-card:hover::before { opacity: 1; }
+    .nearby-name { font-weight: 800; font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .nearby-meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.6rem; align-items: center; }
+    .nearby-cuisine {
+      font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.5rem;
+      border-radius: 999px; background: rgba(249,115,22,0.12);
+      border: 1px solid rgba(249,115,22,0.3); color: var(--accent);
+      text-transform: capitalize;
+    }
+    .nearby-dist {
+      font-size: 0.72rem; color: var(--muted);
+    }
+    .nearby-addr { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.8rem; line-height: 1.4; }
+    .btn-directions {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.4rem 0.9rem; border-radius: 7px;
+      background: transparent; border: 1px solid var(--accent);
+      color: var(--accent); font-size: 0.78rem; font-weight: 700;
+      text-decoration: none; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-directions:hover { background: rgba(249,115,22,0.1); text-decoration: none; }
+    .nearby-empty {
+      font-size: 0.85rem; color: var(--muted); padding: 1rem 0; text-align: center;
+    }
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(249,115,22,0.3);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 0.3rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     @media (max-width: 600px) {
       header { padding: 1rem; }
-      .filter-bar, #map-section, #food-section, #crawl-section { padding-left: 1rem; padding-right: 1rem; }
+      .filter-bar, #map-section, #nearby-section, #food-section, #crawl-section { padding-left: 1rem; padding-right: 1rem; }
     }
   </style>
 </head>
@@ -341,6 +422,33 @@
         <div id="panelDishes"></div>
       </div>
     </div>
+  </section>
+
+  <!-- Nearby Finder -->
+  <section id="nearby-section">
+    <div class="nearby-header">
+      <div>
+        <p class="section-label">Location Finder</p>
+        <h2 style="font-size:1.2rem;font-weight:800;">Tacos Near You 📍</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;">
+        <select class="radius-select" id="radiusSelect">
+          <option value="1000">1 km</option>
+          <option value="3000" selected>3 km</option>
+          <option value="5000">5 km</option>
+          <option value="10000">10 km</option>
+        </select>
+        <button class="btn-locate" id="locateBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+            <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" opacity="0"/>
+          </svg>
+          Find Nearby
+        </button>
+      </div>
+    </div>
+    <div class="nearby-status" id="nearbyStatus">Tap "Find Nearby" to search for Latin restaurants around you.</div>
+    <div class="nearby-grid" id="nearbyGrid"></div>
   </section>
 
   <section id="food-section">
@@ -543,6 +651,172 @@
     // ── Init ──
     renderCards('all');
     renderCrawl();
+
+    // ── Nearby location finder ──
+    // #ASSUMPTION: Overpass API (overpass-api.de) is accessible from device network
+    // #ASSUMPTION: Capacitor.Geolocation available in native build; falls back to browser geo for PWA
+
+    const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
+    const CUISINE_TERMS = 'mexican|taco|tacos|latin|peruvian|colombian|cuban|brazilian|argentinian|salvadoran|guatemalan|honduran|caribbean|tex.mex|burrito';
+    const NAME_TERMS    = 'taco|tacos|burrito|mexican|latin|cantina|hacienda|azteca|fiesta|loco|carnitas|ceviche|tamale|quesadilla|salsas|cocina';
+
+    function buildOverpassQuery(lat, lon, radius) {
+      return `[out:json][timeout:25];
+(
+  node["amenity"="restaurant"]["cuisine"~"${CUISINE_TERMS}",i](around:${radius},${lat},${lon});
+  node["amenity"="fast_food"]["cuisine"~"${CUISINE_TERMS}",i](around:${radius},${lat},${lon});
+  node["amenity"="restaurant"]["name"~"${NAME_TERMS}",i](around:${radius},${lat},${lon});
+  node["amenity"="fast_food"]["name"~"${NAME_TERMS}",i](around:${radius},${lat},${lon});
+  way["amenity"="restaurant"]["cuisine"~"${CUISINE_TERMS}",i](around:${radius},${lat},${lon});
+  way["amenity"="fast_food"]["name"~"${NAME_TERMS}",i](around:${radius},${lat},${lon});
+);
+out body center 40;`;
+    }
+
+    function haversineKm(lat1, lon1, lat2, lon2) {
+      const R = 6371, toRad = x => x * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
+      const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    function fmtDist(km) {
+      return km < 1 ? `${Math.round(km * 1000)}m away` : `${km.toFixed(1)} km away`;
+    }
+
+    function buildAddress(tags) {
+      const parts = [
+        tags['addr:housenumber'] && tags['addr:street'] ? `${tags['addr:housenumber']} ${tags['addr:street']}` : tags['addr:street'],
+        tags['addr:city'],
+        tags['addr:state'],
+      ].filter(Boolean);
+      return parts.join(', ') || tags['addr:full'] || '';
+    }
+
+    function renderNearby(results, userLat, userLon) {
+      const grid = document.getElementById('nearbyGrid');
+      grid.innerHTML = '';
+      if (!results.length) {
+        grid.innerHTML = '<p class="nearby-empty">No Latin / taco spots found in this area. Try a larger radius.</p>';
+        return;
+      }
+
+      // de-dupe by name + rough position, sort by distance
+      const seen = new Set();
+      const unique = results.filter(el => {
+        const lat = el.lat || el.center?.lat;
+        const lon = el.lon || el.center?.lon;
+        if (!lat || !lon) return false;
+        const key = (el.tags?.name || '?') + Math.round(lat * 100) + Math.round(lon * 100);
+        if (seen.has(key)) return false;
+        seen.add(key); return true;
+      });
+
+      unique
+        .map(el => ({
+          el,
+          lat: el.lat || el.center?.lat,
+          lon: el.lon || el.center?.lon,
+          dist: haversineKm(userLat, userLon, el.lat || el.center?.lat, el.lon || el.center?.lon)
+        }))
+        .sort((a, b) => a.dist - b.dist)
+        .forEach(({ el, lat, lon, dist }) => {
+          const tags = el.tags || {};
+          const name    = tags.name || 'Unnamed spot';
+          const cuisine = (tags.cuisine || tags.amenity || '').replace(/_/g,' ').split(';')[0].trim();
+          const addr    = buildAddress(tags);
+          const phone   = tags.phone || tags['contact:phone'] || '';
+          const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
+
+          const card = document.createElement('div');
+          card.className = 'nearby-card';
+          card.innerHTML = `
+            <div class="nearby-name">${name}</div>
+            <div class="nearby-meta">
+              ${cuisine ? `<span class="nearby-cuisine">${cuisine}</span>` : ''}
+              <span class="nearby-dist">📍 ${fmtDist(dist)}</span>
+            </div>
+            ${addr ? `<div class="nearby-addr">${addr}</div>` : ''}
+            ${phone ? `<div style="font-size:0.78rem;color:var(--muted);margin-bottom:0.6rem;">📞 ${phone}</div>` : ''}
+            <a class="btn-directions" href="${mapsUrl}" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+              </svg>
+              Directions
+            </a>
+          `;
+          grid.appendChild(card);
+        });
+    }
+
+    async function getLocationCapacitor() {
+      // Try Capacitor Geolocation first (native), fall back to browser
+      try {
+        const { Geolocation } = await import('https://unpkg.com/@capacitor/geolocation@latest/dist/esm/index.js').catch(() => ({}));
+        if (Geolocation?.getCurrentPosition) {
+          const pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 10000 });
+          return { lat: pos.coords.latitude, lon: pos.coords.longitude };
+        }
+      } catch (_) { /* fall through */ }
+
+      return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) { reject(new Error('Geolocation not supported')); return; }
+        navigator.geolocation.getCurrentPosition(
+          p => resolve({ lat: p.coords.latitude, lon: p.coords.longitude }),
+          e => reject(new Error(e.message || 'Location denied')),
+          { enableHighAccuracy: true, timeout: 12000 }
+        );
+      });
+    }
+
+    document.getElementById('locateBtn').addEventListener('click', async () => {
+      const btn      = document.getElementById('locateBtn');
+      const status   = document.getElementById('nearbyStatus');
+      const grid     = document.getElementById('nearbyGrid');
+      const radius   = parseInt(document.getElementById('radiusSelect').value);
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Locating…';
+      status.className = 'nearby-status loading';
+      status.textContent = 'Getting your location…';
+      grid.innerHTML = '';
+
+      let userLat, userLon;
+      try {
+        const pos = await getLocationCapacitor();
+        userLat = pos.lat; userLon = pos.lon;
+        status.textContent = `📍 Found you — searching ${radius >= 1000 ? radius/1000 + 'km' : radius + 'm'} radius…`;
+      } catch (err) {
+        status.className = 'nearby-status error';
+        status.textContent = `Location error: ${err.message}. Check app location permission.`;
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Find Nearby';
+        return;
+      }
+
+      try {
+        const query = buildOverpassQuery(userLat, userLon, radius);
+        const res   = await fetch(OVERPASS_URL, {
+          method: 'POST',
+          body: `data=${encodeURIComponent(query)}`,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+        if (!res.ok) throw new Error(`Overpass API error ${res.status}`);
+        const data = await res.json();
+        const count = data.elements?.length || 0;
+        status.className = 'nearby-status';
+        status.textContent = count
+          ? `Found ${count} spot${count !== 1 ? 's' : ''} near you. Closest first:`
+          : 'No results — try a larger radius.';
+        renderNearby(data.elements || [], userLat, userLon);
+      } catch (err) {
+        status.className = 'nearby-status error';
+        status.textContent = `Search failed: ${err.message}`;
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Find Nearby';
+    });
 
     // ── PWA ──
     if ('serviceWorker' in navigator) {

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TacoMap — Latin American Flavors, Mapped</title>
-  <meta name="description" content="Interactive Latin American food map with regional filters and taco crawl planner." />
+  <title>TacoMap — Taco & Latin Food Spots Across America</title>
+  <meta name="description" content="Find tacos and Latin food near you. Explore regional taco scenes from Hawaii to NYC with taco crawl planner." />
   <meta name="theme-color" content="#f97316" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://overpass-api.de; font-src 'self'; frame-src 'none'; base-uri 'self'; form-action 'self';" />
   <link rel="manifest" href="./manifest.json" />
@@ -345,75 +345,85 @@
   <header>
     <div>
       <div class="logo">🌮 <span>TacoMap</span></div>
-      <div class="tagline">Latin American flavors, mapped.</div>
+      <div class="tagline">Taco &amp; Latin food scenes across America — from Hawaii to NYC.</div>
     </div>
   </header>
 
   <div class="filter-bar" id="filterBar">
     <button class="filter-btn active" data-region="all">ALL</button>
-    <button class="filter-btn" data-region="Mexico">Mexico</button>
-    <button class="filter-btn" data-region="Peru">Peru</button>
-    <button class="filter-btn" data-region="Colombia">Colombia</button>
-    <button class="filter-btn" data-region="Argentina">Argentina</button>
-    <button class="filter-btn" data-region="Cuba">Cuba</button>
-    <button class="filter-btn" data-region="Brazil">Brazil</button>
-    <button class="filter-btn" data-region="Puerto Rico">Puerto Rico</button>
-    <button class="filter-btn" data-region="Guatemala">Guatemala</button>
+    <button class="filter-btn" data-region="Hawaii">🌺 Hawaii</button>
+    <button class="filter-btn" data-region="SoCal">☀️ SoCal</button>
+    <button class="filter-btn" data-region="Texas">🤠 Texas</button>
+    <button class="filter-btn" data-region="Miami">🌴 Miami</button>
+    <button class="filter-btn" data-region="Chicago">🏙️ Chicago</button>
+    <button class="filter-btn" data-region="NYC">🗽 NYC</button>
+    <button class="filter-btn" data-region="Pacific NW">🌲 Pacific NW</button>
+    <button class="filter-btn" data-region="Southeast">🎸 Southeast</button>
   </div>
 
   <section id="map-section">
     <p class="section-label">Interactive Map</p>
-    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;">Click a region dot to see iconic dishes.</p>
+    <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;">Tap a city dot to explore its taco scene.</p>
     <div class="map-wrap">
       <div class="map-bg">
-        <!-- Decorative LATAM silhouette -->
-        <svg viewBox="0 0 200 360" preserveAspectRatio="xMidYMid meet" fill="var(--accent)">
-          <path d="M85,10 C75,12 65,18 62,28 C58,40 60,52 55,62 C50,72 42,78 40,90
-                   C38,102 44,112 42,124 C40,136 32,144 30,156 C28,168 34,178 36,190
-                   C38,204 34,216 38,228 C43,242 54,250 60,264
-                   C66,278 64,294 72,306 C78,316 88,322 96,332
-                   C100,338 102,346 108,350
-                   C112,346 116,338 122,330 C130,318 140,310 144,298
-                   C148,286 144,274 146,262 C148,250 156,242 158,230
-                   C160,218 156,206 156,194 C156,182 160,172 158,160
-                   C156,148 148,140 148,128 C148,116 154,106 152,94
-                   C150,82 142,74 138,64 C134,54 132,42 128,32
-                   C124,22 116,14 108,10 C100,8 90,9 85,10Z" />
+        <!-- Decorative US + Hawaii silhouette -->
+        <svg viewBox="0 0 580 340" preserveAspectRatio="xMidYMid meet" fill="var(--accent)">
+          <!-- Continental US -->
+          <path d="M75,58 C118,38 175,28 238,24 C298,20 360,20 412,28 C450,34 480,46 500,62
+                   C518,77 525,98 524,120 C523,142 515,162 504,178
+                   C490,198 472,212 454,226 C432,240 408,248 383,257
+                   C355,267 326,272 296,274 C266,276 236,272 208,264
+                   C178,256 150,242 128,224 C104,206 88,182 80,156
+                   C72,130 68,102 75,78 Z"/>
+          <!-- Florida peninsula -->
+          <path d="M454,226 C456,242 458,258 454,272 C450,282 442,286 435,280
+                   C428,270 427,254 430,240 Z"/>
+          <!-- Texas notch (Gulf coast dip) -->
+          <path d="M208,264 C200,272 194,280 198,288 C202,294 212,294 218,286 C224,276 218,265 208,264Z"/>
+          <!-- Alaska (small, decorative top-left) -->
+          <path d="M20,22 C30,16 44,14 52,20 C58,26 56,36 48,40 C40,44 28,40 22,34 Z"/>
+          <!-- Hawaii islands chain (lower-left inset) -->
+          <ellipse cx="48" cy="302" rx="16" ry="7"/>
+          <ellipse cx="78" cy="308" rx="12" ry="5"/>
+          <ellipse cx="104" cy="313" rx="8" ry="4"/>
+          <ellipse cx="124" cy="317" rx="6" ry="3"/>
+          <ellipse cx="140" cy="320" rx="4" ry="2"/>
+          <text x="42" y="332" font-size="9" fill="var(--accent)" opacity="0.6" font-weight="bold">HAWAII</text>
         </svg>
 
         <div class="hotspots" id="hotspots">
-          <!-- positions: left%, top% within the .map-bg container -->
-          <div class="hotspot" style="left:48%;top:18%;" data-region="Mexico">
-            <div class="hotspot-ring">MX</div>
-            <div class="hotspot-tooltip">Mexico · 4 dishes</div>
+          <!-- positions: left%, top% within the .map-bg container — #ASSUMPTION: approximate visual placement -->
+          <div class="hotspot" style="left:12%;top:83%;" data-region="Hawaii">
+            <div class="hotspot-ring">HI</div>
+            <div class="hotspot-tooltip">Hawaii 🌺 · 4 spots</div>
           </div>
-          <div class="hotspot" style="left:44%;top:33%;" data-region="Guatemala">
-            <div class="hotspot-ring">GT</div>
-            <div class="hotspot-tooltip">Guatemala · 2 dishes</div>
+          <div class="hotspot" style="left:9%;top:60%;" data-region="SoCal">
+            <div class="hotspot-ring">LA</div>
+            <div class="hotspot-tooltip">SoCal ☀️ · 4 spots</div>
           </div>
-          <div class="hotspot" style="left:38%;top:44%;" data-region="Colombia">
-            <div class="hotspot-ring">CO</div>
-            <div class="hotspot-tooltip">Colombia · 2 dishes</div>
+          <div class="hotspot" style="left:9%;top:25%;" data-region="Pacific NW">
+            <div class="hotspot-ring">SEA</div>
+            <div class="hotspot-tooltip">Pacific NW 🌲 · 4 spots</div>
           </div>
-          <div class="hotspot" style="left:34%;top:38%;" data-region="Cuba">
-            <div class="hotspot-ring">CU</div>
-            <div class="hotspot-tooltip">Cuba · 1 dish</div>
+          <div class="hotspot" style="left:33%;top:72%;" data-region="Texas">
+            <div class="hotspot-ring">TX</div>
+            <div class="hotspot-tooltip">Texas 🤠 · 4 spots</div>
           </div>
-          <div class="hotspot" style="left:56%;top:38%;" data-region="Puerto Rico">
-            <div class="hotspot-ring">PR</div>
-            <div class="hotspot-tooltip">Puerto Rico · 1 dish</div>
+          <div class="hotspot" style="left:58%;top:78%;" data-region="Miami">
+            <div class="hotspot-ring">MIA</div>
+            <div class="hotspot-tooltip">Miami 🌴 · 4 spots</div>
           </div>
-          <div class="hotspot" style="left:44%;top:58%;" data-region="Peru">
-            <div class="hotspot-ring">PE</div>
-            <div class="hotspot-tooltip">Peru · 2 dishes</div>
+          <div class="hotspot" style="left:51%;top:36%;" data-region="Chicago">
+            <div class="hotspot-ring">CHI</div>
+            <div class="hotspot-tooltip">Chicago 🏙️ · 4 spots</div>
           </div>
-          <div class="hotspot" style="left:57%;top:52%;" data-region="Brazil">
-            <div class="hotspot-ring">BR</div>
-            <div class="hotspot-tooltip">Brazil · 2 dishes</div>
+          <div class="hotspot" style="left:68%;top:38%;" data-region="NYC">
+            <div class="hotspot-ring">NYC</div>
+            <div class="hotspot-tooltip">NYC 🗽 · 4 spots</div>
           </div>
-          <div class="hotspot" style="left:48%;top:76%;" data-region="Argentina">
-            <div class="hotspot-ring">AR</div>
-            <div class="hotspot-tooltip">Argentina · 1 dish</div>
+          <div class="hotspot" style="left:55%;top:62%;" data-region="Southeast">
+            <div class="hotspot-ring">ATL</div>
+            <div class="hotspot-tooltip">Southeast 🎸 · 4 spots</div>
           </div>
         </div>
       </div>
@@ -455,7 +465,7 @@
   <section id="food-section">
     <p class="section-label">Featured Dishes</p>
     <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:0.3rem;">What to Eat</h2>
-    <p style="font-size:0.85rem;color:var(--muted);">12 iconic dishes across Latin America.</p>
+    <p style="font-size:0.85rem;color:var(--muted);">32 local signatures — from Hawaii shrimp trucks to NYC birria ramen.</p>
     <div class="food-grid" id="foodGrid"></div>
   </section>
 
@@ -491,34 +501,68 @@
   <script>
     // Aloha from Pearl City!
 
-    // ── Food data ──
+    // ── Food data — US & Hawaii regional taco/Latin scenes ──
+    // Aloha from Pearl City! 🌺
     const foods = [
-      { name: 'Tacos al Pastor',    region: 'Mexico',      emoji: '🌮', desc: 'Spit-grilled pork with pineapple, cilantro, and salsa verde on a corn tortilla.' },
-      { name: 'Chiles en Nogada',   region: 'Mexico',      emoji: '🌶️', desc: 'Poblano chiles stuffed with picadillo, topped with walnut cream sauce and pomegranate.' },
-      { name: 'Pozole Rojo',        region: 'Mexico',      emoji: '🍲', desc: 'Hominy and pork soup simmered in a deep red chile broth, topped with shredded cabbage.' },
-      { name: 'Tamales',            region: 'Mexico',      emoji: '🫔', desc: 'Masa dough filled with meat or cheese, wrapped in corn husks and steamed.' },
-      { name: 'Ceviche',            region: 'Peru',        emoji: '🍋', desc: 'Fresh fish cured in lime juice with red onion, ají amarillo, and cilantro.' },
-      { name: 'Lomo Saltado',       region: 'Peru',        emoji: '🥩', desc: 'Stir-fried beef with tomatoes, onions, and ají amarillo served over fries and rice.' },
-      { name: 'Arepas',             region: 'Colombia',    emoji: '🫓', desc: 'Grilled corn cakes split and stuffed with cheese, hogao sauce, or shredded chicken.' },
-      { name: 'Bandeja Paisa',      region: 'Colombia',    emoji: '🍳', desc: 'The ultimate Colombian platter: beans, rice, chicharrón, egg, plantain, sausage, avocado.' },
-      { name: 'Asado',              region: 'Argentina',   emoji: '🔥', desc: 'Slow-grilled beef short ribs over wood embers — Argentina\'s national cooking ritual.' },
-      { name: 'Ropa Vieja',         region: 'Cuba',        emoji: '🫕', desc: 'Braised shredded flank steak in tomato, pepper, and onion sofrito. Cubano soul food.' },
-      { name: 'Feijoada',           region: 'Brazil',      emoji: '🫘', desc: 'Black bean stew with smoked pork, sausage, and farofa. Brazil\'s Saturday comfort dish.' },
-      { name: 'Churrasco',          region: 'Brazil',      emoji: '🥩', desc: 'Skewered beef grilled over charcoal — the original Brazilian barbecue experience.' },
-      { name: 'Mofongo',            region: 'Puerto Rico', emoji: '🧄', desc: 'Mashed fried plantains with garlic and chicharrón, served as a bowl for meat or seafood.' },
-      { name: 'Pepián',             region: 'Guatemala',   emoji: '🌿', desc: 'Rich Mayan stew of turkey or chicken in a toasted seed and chile sauce, deeply aromatic.' },
+      // Hawaii — shrimp trucks, fusion, island vibes
+      { name: 'Shrimp Truck Taco',      region: 'Hawaii',     emoji: '🍤', desc: 'North Shore garlic butter shrimp piled on a flour tortilla with shredded cabbage and sriracha mayo. A Oahu truck staple.' },
+      { name: 'Poke Taco',              region: 'Hawaii',     emoji: '🐟', desc: 'Fresh ahi poke — shoyu, sesame, green onion — served on a crispy wonton shell. Island fusion at its best.' },
+      { name: 'Kalbi Fusion Taco',      region: 'Hawaii',     emoji: '🌮', desc: 'Korean-style short rib (kalbi) with kimchi slaw and pickled daikon on flour tortilla. Reflects Hawaii\'s plate culture.' },
+      { name: 'Kalua Pork Burrito',     region: 'Hawaii',     emoji: '🫔', desc: 'Slow-smoked kalua pork, two-scoops rice, and mac salad wrapped in a flour tortilla — plate lunch goes mobile.' },
+
+      // SoCal — LA & San Diego taqueria royalty
+      { name: 'Birria Tacos',           region: 'SoCal',      emoji: '🌮', desc: 'Beef birria braised in guajillo-achiote chile broth, served in a dipped-and-gridded tortilla with consommé for dunking. LA taco trucks made this global.' },
+      { name: 'California Burrito',     region: 'SoCal',      emoji: '🌯', desc: 'Carne asada, french fries, cheddar, sour cream, and guacamole in one massive flour tortilla. Born in San Diego — don\'t debate it.' },
+      { name: 'Street Taco (Carne)',    region: 'SoCal',      emoji: '🌮', desc: 'Chopped carne asada on a double corn tortilla with white onion, cilantro, and salsa roja. The LA taqueria baseline.' },
+      { name: 'Al Pastor',              region: 'SoCal',      emoji: '🍍', desc: 'Achiote-marinated pork on a vertical spit, shaved to order with fresh pineapple. LA taqueria cannot function without it.' },
+
+      // Texas — breakfast tacos + smoke + Tex-Mex
+      { name: 'Breakfast Taco',         region: 'Texas',      emoji: '🥚', desc: 'Fluffy scrambled egg, crispy potato, and melted cheddar on a warm flour tortilla. Austin wakes up this way every morning.' },
+      { name: 'Brisket Taco',           region: 'Texas',      emoji: '🥩', desc: 'Sliced or chopped smoked beef brisket on a flour tortilla with jalapeño slaw and house pickles. Texas BBQ meets the taqueria.' },
+      { name: 'Puffy Taco',             region: 'Texas',      emoji: '🌮', desc: 'Deep-fried masa shell puffed in hot oil then filled with ground beef, lettuce, and tomato. A San Antonio original since the 1950s.' },
+      { name: 'Tex-Mex Enchilada',      region: 'Texas',      emoji: '🫔', desc: 'Corn tortillas stuffed with shredded beef and smothered in chile con carne gravy with melted cheddar. This is not Mexico — this is Texas.' },
+
+      // Miami — Cuban & Caribbean
+      { name: 'Cuban Sandwich',         region: 'Miami',      emoji: '🥪', desc: 'Pressed mojo pork, sliced ham, Swiss cheese, pickles, and yellow mustard on Cuban bread. Little Havana invented it, Miami perfected it.' },
+      { name: 'Pastelito',              region: 'Miami',      emoji: '🥐', desc: 'Flaky golden Cuban pastry filled with guava and cream cheese, or seasoned ground beef. Every bakery counter in Miami has a stack.' },
+      { name: 'Yuca Frita',             region: 'Miami',      emoji: '🍟', desc: 'Crispy fried cassava with a garlic-citrus mojo dipping sauce. Completely unavoidable in any Cuban restaurant in Miami.' },
+      { name: 'Ropa Vieja',             region: 'Miami',      emoji: '🫕', desc: 'Braised shredded flank steak in tomato-pepper sofrito. Cuba\'s national dish is the backbone of every Versailles-style menu in Miami.' },
+
+      // Chicago — Mexican community + Puerto Rican Pilsen fusion
+      { name: 'Tacos de Canasta',       region: 'Chicago',    emoji: '🧺', desc: 'Steamed basket tacos — potato, beans, chicharrón — sweated in a wicker basket to develop a soft, oily-good texture. Pilsen staple.' },
+      { name: 'Elotes Preparados',      region: 'Chicago',    emoji: '🌽', desc: 'Grilled corn ear slathered in mayo, rolled in cotija, dusted with chili powder and lime. A Chicago summer street-cart essential.' },
+      { name: 'Jibarito',               region: 'Chicago',    emoji: '🥪', desc: 'Puerto Rican Chicago invention: steak, garlic mayo, and lettuce sandwiched between two fried green plantains instead of bread. Humboldt Park, 1996.' },
+      { name: 'Pozole',                 region: 'Chicago',    emoji: '🍲', desc: 'Hominy and pork simmered in red or green chile broth, topped with shredded cabbage and oregano. Chicago Mexican families serve this every weekend.' },
+
+      // NYC — Bronx, Queens, Brooklyn Latin food kaleidoscope
+      { name: 'Pernil Taco',            region: 'NYC',        emoji: '🐷', desc: 'Slow-roasted Dominican pork shoulder, crispy-skinned and garlic-heavy, piled on corn tortilla with pickled red onion. The Bronx eats this.' },
+      { name: 'Mexican Torta',          region: 'NYC',        emoji: '🥪', desc: 'Telera roll stuffed with milanesa, avocado, jalapeño, and crema. Jackson Heights, Queens taqueria counter lunch.' },
+      { name: 'Birria Ramen',           region: 'NYC',        emoji: '🍜', desc: 'NYC fusion: rich birria consommé as the ramen base, topped with pulled beef and consome-soaked noodles. Harlem/Brooklyn innovation.' },
+      { name: 'Bacalaítos',             region: 'NYC',        emoji: '🐟', desc: 'Puerto Rican crispy salt cod fritters found at bodegas and parties all over the Bronx and East Harlem. Thin, lacy, addictive.' },
+
+      // Pacific NW — seafood-forward, forager spirit
+      { name: 'Salmon Taco',            region: 'Pacific NW', emoji: '🐟', desc: 'Pacific King Salmon on flour tortilla with cucumber-dill crema and pickled red cabbage. PNW seafood meets the taqueria.' },
+      { name: 'Dungeness Crab Taco',    region: 'Pacific NW', emoji: '🦀', desc: 'Fresh Dungeness crab with avocado, citrus slaw, and chipotle aioli on a corn tortilla. A Seattle taco truck luxury.' },
+      { name: 'Verde Carnitas Burrito', region: 'Pacific NW', emoji: '🌯', desc: 'Slow-braised pork carnitas in bright tomatillo salsa verde, wrapped with black beans and rice. Portland taquerias do this right.' },
+      { name: 'Wild Mushroom Taco',     region: 'Pacific NW', emoji: '🍄', desc: 'PNW foraged chanterelles and cremini sautéed in chili-garlic oil, topped with cotija and chipotle aioli on corn tortilla.' },
+
+      // Southeast — Nashville + Gulf Coast + Carolina BBQ crossover
+      { name: 'Nashville Hot Chicken Taco', region: 'Southeast', emoji: '🔥', desc: 'Cayenne-scorched fried chicken on a flour tortilla with pickle slices and sweet comeback sauce. Nashville heat in taco form.' },
+      { name: 'Gulf Shrimp Taco',       region: 'Southeast', emoji: '🍤', desc: 'Plump Gulf shrimp battered and fried, topped with creamy remoulade and vinegar coleslaw on a flour tortilla. New Orleans to Alabama.' },
+      { name: 'Carolina BBQ Taco',      region: 'Southeast', emoji: '🌮', desc: 'Vinegar-based pulled pork on a corn tortilla with sweet-tangy slaw. North Carolina BBQ culture meets the Latin taqueria format.' },
+      { name: 'Crawfish Taco',          region: 'Southeast', emoji: '🦞', desc: 'Louisiana crawfish étouffée — butter, onion trinity, cayenne — spooned into a flour tortilla. Creole-Latin crossover done right.' },
     ];
 
-    // ── Region panel data ──
+    // ── Region panel data — US/Hawaii city taco scenes ──
     const regionInfo = {
-      'Mexico':      { dishes: ['Tacos al Pastor 🌮', 'Chiles en Nogada 🌶️', 'Pozole Rojo 🍲', 'Tamales 🫔'], color: '#f97316' },
-      'Peru':        { dishes: ['Ceviche 🍋', 'Lomo Saltado 🥩', 'Anticuchos 🍢', 'Papa a la Huancaína 🥔'], color: '#eab308' },
-      'Colombia':    { dishes: ['Arepas 🫓', 'Bandeja Paisa 🍳', 'Sancocho 🍲', 'Empanadas 🥟'], color: '#22c55e' },
-      'Argentina':   { dishes: ['Asado 🔥', 'Empanadas 🥟', 'Medialunas 🥐', 'Dulce de Leche 🍮'], color: '#38bdf8' },
-      'Cuba':        { dishes: ['Ropa Vieja 🫕', 'Cubano Sandwich 🥪', 'Arroz con Pollo 🍗', 'Tostones 🍌'], color: '#a78bfa' },
-      'Brazil':      { dishes: ['Feijoada 🫘', 'Churrasco 🥩', 'Açaí na Tigela 🫐', 'Pão de Queijo 🧀'], color: '#34d399' },
-      'Puerto Rico': { dishes: ['Mofongo 🧄', 'Pernil 🐷', 'Tostones 🍌', 'Arroz con Gandules 🍚'], color: '#f472b6' },
-      'Guatemala':   { dishes: ['Pepián 🌿', 'Kak\'ik 🦃', 'Rellenitos 🍫', 'Chiles Rellenos 🌶️'], color: '#fb923c' },
+      'Hawaii':     { dishes: ['Shrimp Truck Taco 🍤', 'Poke Taco 🐟', 'Kalbi Fusion Taco 🌮', 'Kalua Pork Burrito 🫔'], color: '#f97316' },
+      'SoCal':      { dishes: ['Birria Tacos 🌮', 'California Burrito 🌯', 'Street Taco (Carne) 🌮', 'Al Pastor 🍍'], color: '#eab308' },
+      'Texas':      { dishes: ['Breakfast Taco 🥚', 'Brisket Taco 🥩', 'Puffy Taco 🌮', 'Tex-Mex Enchilada 🫔'], color: '#22c55e' },
+      'Miami':      { dishes: ['Cuban Sandwich 🥪', 'Pastelito 🥐', 'Yuca Frita 🍟', 'Ropa Vieja 🫕'], color: '#38bdf8' },
+      'Chicago':    { dishes: ['Tacos de Canasta 🧺', 'Elotes Preparados 🌽', 'Jibarito 🥪', 'Pozole 🍲'], color: '#a78bfa' },
+      'NYC':        { dishes: ['Pernil Taco 🐷', 'Mexican Torta 🥪', 'Birria Ramen 🍜', 'Bacalaítos 🐟'], color: '#34d399' },
+      'Pacific NW': { dishes: ['Salmon Taco 🐟', 'Dungeness Crab Taco 🦀', 'Verde Carnitas Burrito 🌯', 'Wild Mushroom Taco 🍄'], color: '#f472b6' },
+      'Southeast':  { dishes: ['Nashville Hot Chicken Taco 🔥', 'Gulf Shrimp Taco 🍤', 'Carolina BBQ Taco 🌮', 'Crawfish Taco 🦞'], color: '#fb923c' },
     };
 
     let activeHotspot = null;

@@ -1,0 +1,6 @@
+{
+  "appId": "com.cadger808.tacomap",
+  "appName": "TacoMap",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}

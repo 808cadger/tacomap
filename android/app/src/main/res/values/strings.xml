@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">TacoMap</string>
+    <string name="title_activity_main">TacoMap</string>
+    <string name="package_name">com.cadger808.tacomap</string>
+    <string name="custom_url_scheme">com.cadger808.tacomap</string>
+</resources>

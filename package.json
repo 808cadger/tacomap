@@ -1,7 +1,7 @@
 {
   "name": "tacomap",
   "version": "1.0.0",
-  "description": "TacoMap — Interactive Latin American food map with taco crawl planner",
+  "description": "TacoMap \u2014 Interactive Latin American food map with taco crawl planner",
   "main": "index.html",
   "author": "Christopher Cadger <cadger808@codeberg.org>",
   "license": "UNLICENSED",
@@ -13,7 +13,8 @@
     "@capacitor/android": "^8.1.0",
     "@capacitor/cli": "^8.1.0",
     "@capacitor/core": "^8.1.0",
-    "@capacitor/geolocation": "^8.0.1"
+    "@capacitor/geolocation": "^8.0.1",
+    "@capacitor/app": "^8.0.0"
   },
   "overrides": {
     "minimatch": ">=10.2.3",

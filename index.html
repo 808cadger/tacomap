@@ -522,11 +522,20 @@
 
     let activeHotspot = null;
 
+    // ── O(1) region index — built once at startup ──
+    // ORIGINAL: O(n) filter scan per tap; OPTIMIZED: O(1) Map lookup
+    const foodsByRegion = new Map();
+    foodsByRegion.set('all', foods);
+    foods.forEach(f => {
+      if (!foodsByRegion.has(f.region)) foodsByRegion.set(f.region, []);
+      foodsByRegion.get(f.region).push(f);
+    });
+
     // ── Render food cards ──
     function renderCards(filter) {
       const grid = document.getElementById('foodGrid');
       grid.innerHTML = '';
-      const list = filter === 'all' ? foods : foods.filter(f => f.region === filter);
+      const list = foodsByRegion.get(filter) || foods;
       list.forEach(f => {
         const card = document.createElement('div');
         card.className = 'food-card';
@@ -754,14 +763,15 @@ out body center 40;`;
     }
 
     async function getLocationCapacitor() {
-      // Try Capacitor Geolocation first (native), fall back to browser
+      // #ASSUMPTION: Capacitor.Plugins.Geolocation available when running as native APK
+      // Falls back to browser navigator.geolocation for PWA/desktop
       try {
-        const { Geolocation } = await import('https://unpkg.com/@capacitor/geolocation@latest/dist/esm/index.js').catch(() => ({}));
-        if (Geolocation?.getCurrentPosition) {
-          const pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 10000 });
+        const geo = window.Capacitor?.Plugins?.Geolocation;
+        if (geo?.getCurrentPosition) {
+          const pos = await geo.getCurrentPosition({ enableHighAccuracy: true, timeout: 10000 });
           return { lat: pos.coords.latitude, lon: pos.coords.longitude };
         }
-      } catch (_) { /* fall through */ }
+      } catch (_) { /* fall through to browser geo */ }
 
       return new Promise((resolve, reject) => {
         if (!navigator.geolocation) { reject(new Error('Geolocation not supported')); return; }
@@ -822,8 +832,8 @@ out body center 40;`;
       btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg> Find Nearby';
     });
 
-    // ── PWA ──
-    if ('serviceWorker' in navigator) {
+    // ── PWA — skip SW registration inside Capacitor native build ──
+    if ('serviceWorker' in navigator && !window.Capacitor) {
       window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
     }
   </script>

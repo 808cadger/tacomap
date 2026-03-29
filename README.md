@@ -21,7 +21,7 @@ TacoMap surfaces authentic taco and Latin food spots using live OpenStreetMap da
 
 ## Install
 
-[**Live App →**](https://cadger808.codeberg.page/tacomap) · [Releases](https://codeberg.org/cadger808/tacomap/releases)
+[**Live App →**](https://cadger808.codeberg.page/tacomap) · [**Download APK →**](https://codeberg.org/cadger808/tacomap/releases/download/v1.0.0/TacoMap-v1.0.0.apk) · [Releases](https://codeberg.org/cadger808/tacomap/releases)
 
 ## Deploy
 

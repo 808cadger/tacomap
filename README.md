@@ -1,5 +1,12 @@
 # TacoMap — Taco & Latin Food Spots Across America
 
+## Download Links
+
+- **iOS / iPhone:** Open the PWA in Safari: [TacoMap iOS install](https://808cadger.github.io/tacomap/) and choose **Share -> Add to Home Screen**.
+- **Android:** Download the latest APK from GitHub Releases: [TacoMap Android releases](https://github.com/808cadger/tacomap/releases/latest).
+- **Source download:** [Download the GitHub source ZIP](https://github.com/808cadger/tacomap/archive/refs/heads/main.zip).
+
+
 <!-- INSTALL-START -->
 ## Install and run
 

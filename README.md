@@ -1,10 +1,35 @@
-# TacoMap — Taco & Latin Food Spots Across America
+# TacoMap
+
+[![Release](https://img.shields.io/github/v/release/808cadger/tacomap?include_prereleases&label=release)](https://github.com/808cadger/tacomap/releases)
+[![Last commit](https://img.shields.io/github/last-commit/808cadger/tacomap)](https://github.com/808cadger/tacomap/commits)
+[![License](https://img.shields.io/github/license/808cadger/tacomap)](https://github.com/808cadger/tacomap/blob/HEAD/LICENSE)
+![Platforms](https://img.shields.io/badge/platform-Web%2FPWA%2C%20Android-2563eb)
+
+Taco and Latin food discovery app using live map data, regional guides, saved spots, and crawl planning.
+
+## Project Snapshot
+
+| Area | Details |
+|------|---------|
+| Primary use case | Taco and Latin food discovery app using live map data, regional guides, saved spots, and crawl planning. |
+| Platforms | Web/PWA, Android |
+| Core stack | JavaScript, Capacitor, PWA, OpenStreetMap |
+| Review first | `index.html`, `android`, `capacitor.config.json`, `package.json` |
 
 ## Download Links
 
-- **iOS / iPhone:** Open the PWA in Safari: [TacoMap iOS install](https://808cadger.github.io/tacomap/) and choose **Share -> Add to Home Screen**.
-- **Android:** Download the latest APK from GitHub Releases: [TacoMap Android releases](https://github.com/808cadger/tacomap/releases/latest).
-- **Source download:** [Download the GitHub source ZIP](https://github.com/808cadger/tacomap/archive/refs/heads/main.zip).
+| Platform | Link |
+|----------|------|
+| iOS / iPhone | [Open the PWA in Safari](https://808cadger.github.io/tacomap/) and choose **Share -> Add to Home Screen** |
+| Android | [Download the latest APK from GitHub Releases](https://github.com/808cadger/tacomap/releases/latest) |
+| Source | [Download the GitHub source ZIP](https://github.com/808cadger/tacomap/archive/refs/heads/main.zip) |
+| Repository | [View on GitHub](https://github.com/808cadger/tacomap) |
+
+## Why This Repo Is Worth Reviewing
+
+- Practical location discovery built around a memorable niche.
+- OpenStreetMap integration avoids proprietary account requirements.
+- PWA install path makes the app easy to use while traveling.
 
 
 <!-- INSTALL-START -->
